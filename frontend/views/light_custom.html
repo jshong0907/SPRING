@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+
+<!--------------------
+LOGIN FORM
+by: Amit Jakhu
+www.amitjakhu.com
+--------------------->
+
+<!--META-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Light Custom</title>
+
+<!--STYLESHEETS-->
+<link href="/css/style.css" rel="stylesheet" type="text/css" />
+
+<!--SCRIPTS-->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script    src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+<!--Slider-in icons-->
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $.ajax({
+        url: "http:/127.0.0.1:8080/api/led/status/" + CryptoJS.AES.decrypt($.cookie("token"), 'newTech').toString(CryptoJS.enc.Utf8),
+        method: "GET",
+        dataType: "json"
+    })
+    .done(function(json){
+        room_list = ["kitchen", "livingroom", "bedroom"];
+        jQuery.each(room_list, function(key, value) {
+            $(".content").append('<img class="light_off" id="' + value + '" name="light">');
+            $(".content").append('<br class="room">' + value + '</br>');
+        })
+        jQuery.each(json, function(key, value) {
+            $("#" + value).attr('class', 'light_on')
+        })
+        $(".content").append('<input type="submit" name="submit" value="등록" class="button" />');
+        $(".light_on").click(function(event) {
+            if (this.className == "light_off") this.className = "light_on";
+            else if (this.className == "light_on") this.className = "light_off";
+        });
+        $(".light_off").click(function(event) {
+            if (this.className == "light_off") this.className = "light_on";
+            else if (this.className == "light_on") this.className = "light_off";
+        });
+        $(".button").click(function(event){
+            let all_lights = $('img[name="light"]').map(function() {
+                if (this.className == "light_on") return {[this.id]: 1};
+                else if(this.className == "light_off") return {[this.id]:0};
+            })
+            let data = {};
+            jQuery.each(all_lights, function(index, item) {
+                data[Object.keys(item)[0]] = Object.values(item)[0];
+            });
+            console.log(data);
+            console.log({
+                    "user_id": $.cookie("token"),
+                    "light_custom": data
+                });
+            $.ajax({
+                url: "http:/127.0.0.1:8080/api/led/modify/" + CryptoJS.AES.decrypt($.cookie("token"), 'newTech').toString(CryptoJS.enc.Utf8),
+                method: "PUT",
+                dataType: "json",
+                contentType : "application/json",
+                data: JSON.stringify({
+                    "user_id": CryptoJS.AES.decrypt($.cookie("token"), 'newTech').toString(CryptoJS.enc.Utf8),
+                    "light_custom": data
+                })
+            })
+        })      
+    })
+    .always(function() {console.log("always")})
+    
+    $("#light_image").click(function() {
+        window.location="/main_page"
+    })
+});
+
+
+
+</script>
+
+</head>
+<body>
+<div id="light_image">
+    <img src="images/light.png" width="150px">
+</div>
+<!--WRAPPER-->
+<div id="wrapper">
+
+	<!--SLIDE-IN ICONS-->
+    <!--END SLIDE-IN ICONS-->
+
+<!--LOGIN FORM-->
+<div name="login-form" class="login-form">
+
+	<!--HEADER-->
+    <div class="header">
+    <!--TITLE--><h1>Light Control</h1><!--END TITLE-->
+    
+    </div>
+    <!--END HEADER-->
+	
+	<!--CONTENT-->
+    <div class="content">
+            
+    </div>
+</div>
+<!--END LOGIN FORM-->
+
+<!--END WRAPPER-->
+
+<!--GRADIENT--><div class="gradient"></div><!--END GRADIENT-->
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: local # 기본적으로 local이 선택된다는 뜻
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/ 
+      suffix: .jsp
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://ledcontrol.cwwlhguksfxl.us-east-1.rds.amazonaws.com:3306/newtech?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC # DB명 치환
+    username: admin # DB아이디 치환
+    password: jieun123 # DB비번 치환
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB 
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    #properties.hibernate.hbm2ddl.auto: update
+    showSql: true
+    generate-ddl: true
+  messages:
+    basename: i18n/exception
+    encoding: UTF-8
+  #jwt:
+    #secret: govlepel@$&     
+      
+mybatis:
+  type-aliases-package: com.example.restapi.dto # dto의 풀 패키지 명 입력
+
+telegram:
+  token: "1457266293:AAGtIXQjfomX6KEWLr1lNQo8fE2bOzGSTTk"
+  chat_id: "1498722293"
+
+cloud:
+  aws:
+    credentials:
+      accessKey: "AKIATDD4YZYTAHUYQO7J"
+      secretKey: "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"
+    s3:
+      bucket: "face-madcat"
+    region:
+      static: "ap-northeast-2"
+    stack:
+      auto: false

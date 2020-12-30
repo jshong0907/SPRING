@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+
+<!--------------------
+LOGIN FORM
+by: Amit Jakhu
+www.amitjakhu.com
+--------------------->
+
+<!--META-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Main Page</title>
+
+<!--STYLESHEETS-->
+<link href="/css/style.css" rel="stylesheet" type="text/css" />
+
+<!--SCRIPTS-->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script    src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+<!--Slider-in icons-->
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".username").focus(function() {
+		$(".user-icon").css("left","-48px");
+	});
+	$(".username").blur(function() {
+		$(".user-icon").css("left","0px");
+	});
+	
+	$(".password").focus(function() {
+		$(".pass-icon").css("left","-48px");
+	});
+	$(".password").blur(function() {
+		$(".pass-icon").css("left","0px");
+    });
+    
+    $("#logout").click(function(event) {
+        $.removeCookie('token', { path: '/' });
+        window.location="/"
+    });
+
+    $("#light_image").click(function() {
+        window.location="/main_page"
+    })
+});
+</script>
+
+</head>
+<body>
+<div id="light_image">
+    <img src="images/light.png" width="150px">
+</div>
+<!--WRAPPER-->
+<div id="wrapper">
+
+	<!--SLIDE-IN ICONS-->
+    <div class="user-icon"></div>
+    <div class="pass-icon"></div>
+    <!--END SLIDE-IN ICONS-->
+
+<!--LOGIN FORM-->
+<div name="login-form" class="login-form">
+
+	<!--HEADER-->
+    <div class="header">
+    <!--TITLE--><h1>Light Control</h1><!--END TITLE-->
+    
+    </div>
+    <!--END HEADER-->
+	
+	<!--CONTENT-->
+    <div class="content">
+        <a href="/light_status" class="main_menu">현재 조명 상태 확인</a>
+        <a href="/light_custom" class="main_menu">조명 커스터마이징</a>
+        <a href="/visit_log" class="main_menu">출입 기록 확인</a>
+        <a href="/modify_user" class="main_menu">회원 정보 변경</a>
+        <div href="/" id="logout" class="main_menu">로그아웃</div>
+    </div>
+</div>
+
+<!--GRADIENT--><div class="gradient"></div><!--END GRADIENT-->
+
+</body>
+</html>

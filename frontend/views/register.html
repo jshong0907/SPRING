@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+
+<!--------------------
+LOGIN FORM
+by: Amit Jakhu
+www.amitjakhu.com
+--------------------->
+
+<!--META-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Login Form</title>
+
+<!--STYLESHEETS-->
+<link href="/css/style.css" rel="stylesheet" type="text/css" />
+
+<!--SCRIPTS-->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script    src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
+<!--Slider-in icons-->
+<script type="text/javascript">
+function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      $('#register_image').attr('src', e.target.result);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
+$(document).ready(function() {
+	$(".username").focus(function() {
+		$(".user-icon").css("left","-48px");
+	});
+	$(".username").blur(function() {
+		$(".user-icon").css("left","0px");
+	});
+	
+	$(".password").focus(function() {
+		$(".pass-icon").css("left","-48px");
+	});
+	$(".password").blur(function() {
+		$(".pass-icon").css("left","0px");
+    });
+
+    $("input[name=submit]").click(function(event) {
+        var user_id = $('input[name=user_id]').val();
+        console.log(user_id);
+        var user_pw = $('input[name=user_pw]').val();
+        var check_pw = $('input[name=check_pw]').val();
+        var name = $('input[name=name]').val();
+        var email = $('input[name=email]').val();
+        var input = $('input[name=add_photo]')[0];
+        
+
+        if (check_pw == user_pw) {
+            $.ajax({
+                url: "http:/127.0.0.1:8080/api/member/signup",
+                type: "POST",
+                dataType: "json",
+                contentType : "application/json",
+                data: JSON.stringify({"user_Id": user_id, "user_Pw": user_pw, "name": name, "email": email})
+
+            }).done(function(json){
+                $.cookie("token", user_id);
+                console.log($.cookie("token"));
+                console.log(json);
+
+                var data = new FormData();
+                data.append("user_id", user_id);
+                data.append("file", input.files[0]);
+                console.log(data);
+                $.ajax({
+                    url: "http:/127.0.0.1:8080/api/aws/upload",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    data: data
+                }).done(function() {
+                    window.location="/main_page";
+                }).fail(function() {
+                    alert("failed register");
+                })
+            })  
+            .fail(function() {alert("failed");})
+            
+        }
+    });
+        
+    $("#add_photo").change(function() {
+        readURL(this);
+    });
+});
+</script>
+
+</head>
+<body>
+<div id="light_image">
+    <img src="images/light.png" width="150px">
+</div>
+<!--WRAPPER-->
+<div id="wrapper">
+
+	<!--SLIDE-IN ICONS-->
+    <div class="user-icon"></div>
+    <div class="pass-icon"></div>
+    <!--END SLIDE-IN ICONS-->
+
+<!--LOGIN FORM-->
+<div name="login-form" class="login-form">
+
+	<!--HEADER-->
+    <div class="header">
+    <!--TITLE--><h1>Light Control</h1><!--END TITLE-->
+    
+    </div>
+    <!--END HEADER-->
+	
+	<!--CONTENT-->
+    <div class="content">
+	<!--USERNAME--><input name="user_id" type="text" class="input username" value="ID" onfocus="this.value=''" /><!--END USERNAME-->
+    <!--PASSWORD--><input name="user_pw" type="password" class="input password" value="Password" onfocus="this.value=''" /><!--END PASSWORD-->
+    <!--PASSWORD--><input name="check_pw" type="password" class="input password" value="Password" onfocus="this.value=''" /><!--END PASSWORD-->
+    <!--USERNAME--><input name="name" type="text" class="input username" value="Username" onfocus="this.value=''" /><!--END USERNAME-->
+    <!--USERNAME--><input name="email" type="text" class="input username" value="Eamil" onfocus="this.value=''" /><!--END USERNAME-->
+    <img src="images/not_found.jpg" width="150px" id="register_image" class="register_image" />
+    <input type="file" accept=".jpg,.png" id="add_photo" name="add_photo" value="사진 등록"  >
+    <input type="submit" name="submit" value="등록" class="button" />
+    </div>
+    <!--END CONTENT-->
+    
+
+
+</div>
+<!--END LOGIN FORM-->
+
+</div>
+<!--END WRAPPER-->
+
+<!--GRADIENT--><div class="gradient"></div><!--END GRADIENT-->
+
+</body>
+</html>

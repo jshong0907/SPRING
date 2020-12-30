@@ -1,0 +1,15 @@
+com\example\restapi\light\Light.class
+com\example\restapi\member\MemberService.class
+com\example\restapi\member\Member.class
+com\example\restapi\RestapiApplication.class
+com\example\restapi\visit\Visit.class
+com\example\restapi\light\LightPK.class
+com\example\restapi\light\LightRepository.class
+com\example\restapi\light\LightController.class
+com\example\restapi\visit\VisitRepository.class
+com\example\restapi\visit\VisitController.class
+com\example\restapi\member\MemberRepository.class
+com\example\restapi\member\MemberController.class
+com\example\restapi\s3\S3Controller.class
+com\example\restapi\security\SecurityJavaConfig.class
+com\example\restapi\telegram\Telegram.class

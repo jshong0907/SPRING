@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+
+<!--------------------
+LOGIN FORM
+by: Amit Jakhu
+www.amitjakhu.com
+--------------------->
+
+<!--META-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Light Status</title>
+
+<!--STYLESHEETS-->
+<link href="/css/style.css" rel="stylesheet" type="text/css" />
+
+<!--SCRIPTS-->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script    src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+<!--Slider-in icons-->
+<script type="text/javascript">
+$(document).ready(function() {
+    $.ajax({
+        url: "http:/127.0.0.1:8080/api/visit/log/" + CryptoJS.AES.decrypt($.cookie("token"), 'newTech').toString(CryptoJS.enc.Utf8),
+        method: "GET",
+        dataType: "json"
+    })
+    .done(function(json){
+        let res=json.log;
+        jQuery.each(json, function(index, item) {
+            let content = "";
+            content += '<tr>'
+            jQuery.each(item, function(key, value) {
+
+                if (key == "time") {
+                    content += '<td>' + value + '</td>';
+                }
+                else if (key=="name") {
+                    content += '<td>' + value + '</td>';
+                }
+            })
+            content += '</tr>'
+            $(".visit_table_body").append(content);
+        })
+ 
+    })
+    .always(function() {console.log("always")})
+    
+    $("#light_image").click(function() {
+        window.location="/main_page"
+    })
+    
+});
+</script>
+
+</head>
+<body>
+<div id="light_image">
+    <img src="images/light.png" width="150px">
+</div>
+<!--WRAPPER-->
+<div id="wrapper">
+
+	<!--SLIDE-IN ICONS-->
+    <!--END SLIDE-IN ICONS-->
+
+<!--LOGIN FORM-->
+<form name="login-form" class="login-form" action="/user/login" method="post">
+
+	<!--HEADER-->
+    <div class="header">
+    <!--TITLE--><h1>Light Control</h1><!--END TITLE-->
+    
+    </div>
+    <!--END HEADER-->
+	
+	<!--CONTENT-->
+    <div class="content">
+        <table class="visit_table">
+            <thead class="visit_table_head">
+                <tr>
+                    <th>방문시간</th>
+                    <th>방문자명</th>
+                </tr>
+            </thead>
+            <tbody class="visit_table_body">
+
+            </tbody>
+        </table>
+        
+
+    </div>
+</form>
+<!--END LOGIN FORM-->
+
+<!--END WRAPPER-->
+
+<!--GRADIENT--><div class="gradient"></div><!--END GRADIENT-->
+
+</body>
+</html>

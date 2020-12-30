@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+
+<!--------------------
+LOGIN FORM
+by: Amit Jakhu
+www.amitjakhu.com
+--------------------->
+
+<!--META-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Login Form</title>
+
+<!--STYLESHEETS-->
+<link href="/css/style.css" rel="stylesheet" type="text/css" />
+
+<!--SCRIPTS-->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script    src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
+<!--Slider-in icons-->
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".username").focus(function() {
+		$(".user-icon").css("left","-48px");
+	});
+	$(".username").blur(function() {
+		$(".user-icon").css("left","0px");
+	});
+	
+	$(".password").focus(function() {
+		$(".pass-icon").css("left","-48px");
+	});
+	$(".password").blur(function() {
+		$(".pass-icon").css("left","0px");
+    });
+
+    $(".button").click(function(event) {
+        var user_id = $('input[name=user_id]').val();
+        console.log(user_id);
+        var user_pw = $('input[name=user_pw]').val();
+
+        $.ajax({
+            url: "http://127.0.0.1:8080/member/login",
+            type: "POST",
+            dataType: "json",
+            contentType : "application/json",
+            
+            data: JSON.stringify({"user_Id": user_id, "user_Pw": user_pw})
+        }).done(function(json, status, xhr){
+            if (json == "OK") 
+            {
+                var date = new Date();  
+                var minutes = 30;
+                date.setTime(date.getTime() + (minutes * 60 * 1000));
+                $.cookie("token", CryptoJS.AES.encrypt(user_id, 'newTech').toString(), {expires: date});
+                console.log($.cookie("token"));
+                //console.log(xhr.getResponseHeader('PHPSESSID'));
+                window.location="/main_page";
+            }
+            else alert("failed");
+        })
+        .fail(function() {alert("failed");})
+        })
+
+    $(".register").click(function(event) {
+        window.location="/register"
+    })
+});
+</script>
+
+</head>
+<body>
+<div id="light_image">
+    <img src="images/light.png" width="150px">
+</div>
+<!--WRAPPER-->
+<div id="wrapper">
+
+	<!--SLIDE-IN ICONS-->
+    <div class="user-icon"></div>
+    <div class="pass-icon"></div>
+    <!--END SLIDE-IN ICONS-->
+
+<!--LOGIN FORM-->
+<div name="login-form" class="login-form">
+
+	<!--HEADER-->
+    <div class="header">
+    <!--TITLE--><h1>Light Control</h1><!--END TITLE-->
+    
+    </div>
+    <!--END HEADER-->
+	
+	<!--CONTENT-->
+    <div class="content">
+	<!--USERNAME--><input name="user_id" type="text" class="input username" value="Username" onfocus="this.value=''" /><!--END USERNAME-->
+    <!--PASSWORD--><input name="user_pw" type="password" class="input password" value="Password" onfocus="this.value=''" /><!--END PASSWORD-->
+    </div>
+    <!--END CONTENT-->
+    
+    <!--FOOTER-->
+    <div class="footer">
+    <!--LOGIN BUTTON--><input type="submit" name="submit" value="Login" class="button" /><!--END LOGIN BUTTON-->
+    <!--REGISTER BUTTON--><input type="submit" name="submit" value="Register" class="register"/><!--END REGISTER BUTTON-->
+    </div>
+    <!--END FOOTER-->
+
+</div>
+<!--END LOGIN FORM-->
+
+</div>
+<!--END WRAPPER-->
+
+<!--GRADIENT--><div class="gradient"></div><!--END GRADIENT-->
+
+</body>
+</html>
